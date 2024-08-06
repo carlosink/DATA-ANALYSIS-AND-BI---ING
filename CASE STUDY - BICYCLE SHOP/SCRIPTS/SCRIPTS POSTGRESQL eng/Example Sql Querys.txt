@@ -1,0 +1,298 @@
+
+-- Example 1
+--- Like
+
+select *   
+from dimensional.dimensioncustomer
+where lower(customer) like '%am%'
+
+---------------------
+-- Example 2
+
+select customer,status
+from relational.customers
+
+---------------------
+-- Example 3
+
+select distinct customer,status
+from relational.customers
+
+
+---------------------
+-- Example 4
+
+select *
+from relational.customers
+where status <> 'Platinum' 
+and sex = 'F'
+
+
+---------------------
+-- Example 5
+
+
+select *
+from relational.customers
+where status <> 'Platinum' 
+or sex = 'F'
+
+---------------------
+-- Example 6
+-- Left join
+
+select *
+from dimensional.factsales fc 
+     left join
+	 dimensional.dimensioncustomer dc
+	on (fc.keycustomer=dc.keycustomer)     
+order by 1 desc
+
+
+
+
+----------------------------------- 
+
+-- Example 7
+-- Right join
+
+select *
+from dimensional.factsales fc 
+     right join
+	 dimensional.dimensioncustomer dc
+	on (fc.keycustomer=dc.keycustomer) 
+order by 1 desc
+
+
+----------------------------------- 
+
+-- Example 8
+-- union 
+
+
+select distinct customer as name,
+	   startdatevalidity as registry_date, 
+		'Customer' as Type   
+from dimensional.dimensioncustomer
+union all	
+select distinct name,
+	    startdatevalidity as registry_date, 
+		'Seller' as Type   
+from dimensional.dimensionseller
+	
+
+
+----------------------------------- 
+
+-- exemple 9
+
+select customer,
+	   status,
+	   sum(quantity) as quantity,
+	   sum(totalvalue) as totalvalue,
+	   sum(discount) as discount 
+from dimensional.factsales fc
+     inner join
+	 dimensional.dimensioncustomer dc
+on (fc.keycustomer=dc.keycustomer)
+group by customer,status
+order by totalvalue desc , quantity asc
+limit 5
+
+--------------------------------------------
+
+-- Example 10
+-- Having
+
+select seller,
+	   max(totalvalue) max_total_value
+
+from (select name as seller,
+	   		 customer,      
+	   		sum(quantity) as quantity,  
+	   		sum(totalvalue) as totalvalue,
+	   		sum(discount) as discount 
+		from dimensional.factsales fc 
+     	inner join
+	 	dimensional.dimensioncustomer dc
+		on (fc.keycustomer=dc.keycustomer) 
+	 	inner join 
+	 	dimensional.dimensionseller ds
+    	on (fc.keyseller=ds.keyseller)
+		group by status,name,customer ) leve1
+group by seller
+having max(totalvalue)  > 20000
+order by 2 asc
+
+
+
+---------------------
+
+
+--- Example 11
+
+select seller,
+	   max(totalvalue) max_total_value
+
+from (select name as seller,
+	   		 customer,      
+	   		sum(quantity) as quantity,  
+	   		sum(totalvalue) as totalvalue,
+	   		sum(discount) as discount 
+		from dimensional.factsales fc 
+     	inner join
+	 	dimensional.dimensioncustomer dc
+		on (fc.keycustomer=dc.keycustomer) 
+	 	inner join 
+	 	dimensional.dimensionseller ds
+    	on (fc.keyseller=ds.keyseller)
+		group by status,name,customer ) leve1
+group by seller
+order by 1 asc 
+
+
+-------------------------------------
+
+---- Example 12
+
+select seller,
+	   customer,
+	   max(totalvalue) max_total_value
+
+from (select name as seller,
+	   		 customer,      
+	   		sum(quantity) as quantity,  
+	   		sum(totalvalue) as totalvalue,
+	   		sum(discount) as discount 
+		from dimensional.factsales fc 
+     	inner join
+	 	dimensional.dimensioncustomer dc
+		on (fc.keycustomer=dc.keycustomer) 
+	 	inner join 
+	 	dimensional.dimensionseller ds
+    	on (fc.keyseller=ds.keyseller)
+		group by status,name,customer ) leve1
+group by seller,customer
+order by 1 asc , 3 desc
+
+
+-----------------------------------------
+
+---- Example 13
+
+
+select seller,
+	   customer,
+	   max_total_value
+	
+from (select keyseller,
+	         seller,
+	         customer,
+	   		max(totalvalue) max_total_value     
+
+		from (select ds.keyseller,
+					name as seller,    
+	   				customer,      
+	   				sum(quantity) as quantity,  
+	   				sum(totalvalue) as totalvalue,
+	   				sum(discount) as discount 
+			from dimensional.factsales fc 
+     		inner join
+	 		dimensional.dimensioncustomer dc
+			on (fc.keycustomer=dc.keycustomer) 
+	 		inner join 
+	 		dimensional.dimensionseller ds
+    		on (fc.keyseller=ds.keyseller)
+			group by ds.keyseller,name,customer ) leve1
+group by keyseller,
+	     seller,
+	     customer) level2
+order by 1 asc , 3 desc
+
+
+-----------------------------------
+
+---- Example 14
+
+
+select seller,
+	   quantity_costumers,      
+	   quantity,
+	   totalvalue,
+	   discount 
+from (select name as seller,
+	   		count(distinct customer) as quantity_costumers,      
+	   		sum(quantity) as quantity,
+	   		sum(totalvalue) as totalvalue,
+	   		sum(discount) as discount 
+		from dimensional.factsales fc 
+     	inner join
+	 	dimensional.dimensioncustomer dc
+		on (fc.keycustomer=dc.keycustomer) 
+	 	inner join 
+	 	dimensional.dimensionseller ds
+    	on (fc.keyseller=ds.keyseller)
+		group by status,name ) leve1
+where totalvalue between 9000 and 50000
+order by 2 desc
+
+
+
+---------------------------------------------
+
+-- Example 15
+
+select seller,
+	   customer,
+	   max_total_value
+	
+from (select keyseller,
+	         seller,
+	         customer,
+	   		max(totalvalue) max_total_value     
+
+		from (select ds.keyseller,
+					name as seller,    
+	   				customer,      
+	   				sum(quantity) as quantity,  
+	   				sum(totalvalue) as totalvalue,
+	   				sum(discount) as discount 
+			from dimensional.factsales fc 
+     		inner join
+	 		dimensional.dimensioncustomer dc
+			on (fc.keycustomer=dc.keycustomer) 
+	 		inner join 
+	 		dimensional.dimensionseller ds
+    		on (fc.keyseller=ds.keyseller)
+			group by ds.keyseller,name,customer ) leve1
+group by keyseller,
+	     seller,
+	     customer) level2
+where cast(keyseller as text) || cast(max_total_value as text) in (select distinct cast(keyseller as text) || cast(totalvalue as text)
+																	from (select keyseller , max(totalvalue) as totalvalue 
+																			from (select    ds.keyseller,
+	                                                                                       dc.customer,
+	   																					sum(totalvalue) as totalvalue  
+																					from dimensional.factsales fc   
+     																				inner join
+	 																				dimensional.dimensioncustomer dc
+																					on (fc.keycustomer=dc.keycustomer) 
+	 																				inner join 
+	 																				dimensional.dimensionseller ds
+    																				on (fc.keyseller=ds.keyseller)
+																					group by ds.keyseller,dc.customer) subleve1_1
+																			group by keyseller	) subleve1_2)    
+order by 1 asc , 3 desc
+
+
+
+
+
+
+-----------------------------------
+
+
+
+
+
+

@@ -1,0 +1,9 @@
+
+>> Sublime Text 3  : Used to created and edit scripts in the sql language used in the postgre database
+
+>> pgAdmin 4 : This is the management tool for using Postgre database to run queries and manage objects in the database
+
+>> Postgree: Database used to store two different types of database, in two different schemas, the relational and dimensional database, to demonstrate skills in relational modeling and modeling of a data warehouse and use this data to feed the Power Bi Report that will be developed.
+
+>> Power BI : Data Visualization tool, used to demonstrate skills for developing a Dahsboard using data from the postgre database and using data summarization and dax language to develop Kpis and Metrics relevant to the business manager.
+

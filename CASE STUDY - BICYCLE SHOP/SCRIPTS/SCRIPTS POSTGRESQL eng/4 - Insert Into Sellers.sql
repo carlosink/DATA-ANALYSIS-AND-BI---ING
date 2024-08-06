@@ -1,0 +1,10 @@
+INSERT INTO Relational.Sellers(Name) VALUES ('Armando Lago');
+INSERT INTO Relational.Sellers(Name) VALUES ('Capitolino Bahía');
+INSERT INTO Relational.Sellers(Name) VALUES ('Daniel Pirajá');
+INSERT INTO Relational.Sellers(Name) VALUES ('Godo Capiperibe');
+INSERT INTO Relational.Sellers(Name) VALUES ('Hélio Liberato');
+INSERT INTO Relational.Sellers(Name) VALUES ('Iberê Lacerda');
+INSERT INTO Relational.Sellers(Name) VALUES ('Jéssica Castelão');
+INSERT INTO Relational.Sellers(Name) VALUES ('Napoleão Méndez');
+INSERT INTO Relational.Sellers(Name) VALUES ('Simão Rivero');
+INSERT INTO Relational.Sellers(Name) VALUES ('Tobias Furtado');
